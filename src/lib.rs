@@ -3,7 +3,7 @@ pub fn pretty_type_name<T: ?Sized>() -> String {
     pretty_type_name_str(type_name)
 }
 
-pub(crate) fn pretty_type_name_str(type_name: &str) -> String {
+pub fn pretty_type_name_str(type_name: &str) -> String {
     // fn types
     if type_name.starts_with("fn(") {
         if let Some((before, in_between, after)) = split_between(type_name, '(', ')') {
