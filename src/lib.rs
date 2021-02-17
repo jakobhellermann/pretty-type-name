@@ -1,11 +1,19 @@
-#![feature(str_split_once)]
-
 pub fn pretty_type_name<T: ?Sized>() -> String {
     let type_name = std::any::type_name::<T>();
     pretty_type_name_str(type_name)
 }
 
 pub(crate) fn pretty_type_name_str(type_name: &str) -> String {
+    // fn types
+    if type_name.starts_with("fn(") {
+        if let Some((before, in_between, after)) = split_between(type_name, '(', ')') {
+            debug_assert_eq!(before, "fn");
+            debug_assert!(after.is_empty());
+            let list = join_with(in_between.split(", ").map(pretty_type_name_str));
+            return format!("fn({})", list);
+        }
+    }
+
     // handle tuple structs separately
     if let Some(inner) = type_name
         .strip_prefix('(')
@@ -32,9 +40,21 @@ fn split_between(
     left_terminator: char,
     right_terminator: char,
 ) -> Option<(&str, &str, &str)> {
-    let (before, rest) = input.split_once(left_terminator)?;
-    let (in_between, after) = rest.rsplit_once(right_terminator)?;
+    let (before, rest) = split_once(input, left_terminator)?;
+    let (in_between, after) = rsplit_once(rest, right_terminator)?;
     Some((before, in_between, after))
+}
+
+// replace with `str_split_once` once stable (rust 1.51)
+fn split_once(input: &str, delimiter: char) -> Option<(&str, &str)> {
+    let mut iter = input.splitn(2, delimiter);
+    Some((iter.next()?, iter.next()?))
+}
+fn rsplit_once(input: &str, delimiter: char) -> Option<(&str, &str)> {
+    let mut iter = input.rsplitn(2, delimiter);
+    let rightmost = iter.next()?;
+    let rest = iter.next()?;
+    Some((rest, rightmost))
 }
 
 fn join_with(iter: impl Iterator<Item = String>) -> String {
