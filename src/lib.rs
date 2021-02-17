@@ -19,6 +19,9 @@ pub(crate) fn pretty_type_name_str(type_name: &str) -> String {
         .strip_prefix('(')
         .and_then(|name| name.strip_suffix(')'))
     {
+        if inner.contains('(') {
+            return type_name.to_string(); // nested tuples are not supported yet
+        }
         let list = join_with(inner.split(", ").map(pretty_type_name_str));
         return format!("({})", list);
     }
