@@ -1,8 +1,26 @@
+//! ```rust
+//! use pretty_type_name::pretty_type_name;
+//!
+//! mod foo {
+//!     pub mod bar {
+//!         pub struct X<T>(T);
+//!     }
+//!
+//!     pub struct Y;
+//! }
+//!
+//! println!("{}", pretty_type_name::<foo::bar::X<foo::Y>>());
+//! # assert_eq!(pretty_type_name::<foo::bar::X<foo::Y>>(), "X<Y>".to_string());
+//! // prints `X<Y>`
+//! ```
+
+/// Returns a shorter version of [`std::any::type_name`]
 pub fn pretty_type_name<T: ?Sized>() -> String {
     let type_name = std::any::type_name::<T>();
     pretty_type_name_str(type_name)
 }
 
+/// same as [pretty_type_name], but works strings
 pub fn pretty_type_name_str(type_name: &str) -> String {
     // fn types
     if type_name.starts_with("fn(") {
