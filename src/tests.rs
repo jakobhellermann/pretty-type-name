@@ -35,6 +35,14 @@ fn complex_name() {
 }
 
 #[test]
+fn tuples() {
+    assert_eq!(
+        pretty_type_name_str("(m::A, (m::B, m::C))"),
+        "(A, (B, C))".to_string()
+    );
+}
+
+#[test]
 fn fn_type_name() {
     mod m {
         pub struct T;
