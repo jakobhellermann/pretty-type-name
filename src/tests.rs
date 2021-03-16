@@ -43,6 +43,14 @@ fn tuples() {
 }
 
 #[test]
+fn chain() {
+    assert_eq!(
+        pretty_type_name_str("Chain(a::first, b::second)"),
+        "Chain(first, second)".to_string()
+    );
+}
+
+#[test]
 fn fn_type_name() {
     mod m {
         pub struct T;
