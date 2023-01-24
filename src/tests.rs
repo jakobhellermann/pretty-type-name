@@ -61,3 +61,14 @@ fn fn_type_name() {
         "fn(String, T)".to_string()
     );
 }
+
+#[test]
+fn closure_format() {
+    fn pretty_type_name_of_val<T>(_: T) -> String {
+        pretty_type_name::<T>()
+    }
+    assert_eq!(
+        pretty_type_name_of_val(|| {}),
+        "closure_format::{{closure}}".to_string()
+    );
+}

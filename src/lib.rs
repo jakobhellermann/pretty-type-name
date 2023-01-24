@@ -22,8 +22,11 @@ pub fn pretty_type_name<T: ?Sized>() -> String {
 
 /// same as [pretty_type_name], but works strings
 pub fn pretty_type_name_str(type_name: &str) -> String {
-    // code taken from [bevy](https://github.com/bevyengine/bevy/blob/89a41bc62843be5f92b4b978f6d801af4de14a2d/crates/bevy_reflect/src/type_registry.rs#L156)
+    if let Some(before) = type_name.strip_suffix("::{{closure}}") {
+        return format!("{}::{{{{closure}}}}", pretty_type_name_str(before));
+    }
 
+    // code taken from [bevy](https://github.com/bevyengine/bevy/blob/89a41bc62843be5f92b4b978f6d801af4de14a2d/crates/bevy_reflect/src/type_registry.rs#L156)
     let mut short_name = String::new();
 
     // A typename may be a composition of several other type names (e.g. generic parameters)
