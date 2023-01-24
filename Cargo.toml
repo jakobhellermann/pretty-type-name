@@ -1,6 +1,6 @@
 [package]
 name = "pretty-type-name"
-version = "1.0.0"
+version = "1.0.1"
 authors = ["Jakob Hellermann <jakob.hellermann@protonmail.com>"]
 description = "a shorter version of std::any::type_name"
 repository = "https://github.com/jakobhellermann/pretty-type-name"
